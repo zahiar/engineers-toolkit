@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  graylog_mongo:
+    image: mongo:3
+
+  graylog_elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
+    environment:
+      http.host: 0.0.0.0
+      transport.host: localhost
+      network.host: 0.0.0.0.
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+
+  graylog:
+    image: graylog/graylog:3.2
+    environment:
+      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+      GRAYLOG_ROOT_PASSWORD_SHA2: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 #User/Pass = admin
+    ports:
+      - 9000:9000 # Webserver
+      - 5555:5555 # Can be used to send logs to E.G. `echo 'My Log Message' | nc localhost 5555`
+    links:
+      - graylog_mongo:mongo
+      - graylog_elasticsearch:elasticsearch
+    depends_on:
+      - graylog_mongo
+      - graylog_elasticsearch
