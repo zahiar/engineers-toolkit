@@ -2,6 +2,7 @@ package main
 
 import (
 	"./command/logging"
+	"./command/pipeline"
 	"github.com/urfave/cli"
 	"os"
 )
@@ -13,6 +14,7 @@ func main() {
 		Version:     "v0.0.1",
 		Commands: []*cli.Command{
 			logging.GetCommands(),
+			pipeline.GetCommands(),
 		},
 	}
 
