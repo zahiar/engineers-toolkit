@@ -27,3 +27,13 @@ services:
     depends_on:
       - graylog_mongo
       - graylog_elasticsearch
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
+    environment:
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+      JENKINS_OPTS: --argumentsRealm.roles.user=admin --argumentsRealm.passwd.admin=admin --argumentsRealm.roles.admin=admin
+    ports:
+      - 8080:8080
